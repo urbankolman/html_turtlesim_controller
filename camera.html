@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Include necessary ros2djs scripts -->
+  <script src="easeljs.js"></script> 
+  <script src="eventemitter2.js"></script> 
+  <script src="roslib.js"></script> 
+  <script src="ros2d.js"></script> 
+</head>
+<body>
+  <canvas id="cameraCanvas" width="640" height="480"></canvas>
+  
+  <script>
+    // Initialize ROS
+    var ros = new ROSLIB.Ros({
+      url: 'ws://localhost:9090'  // Change this to match your ROS setup
+    });
+
+    // Create a canvas element
+    var canvas = document.getElementById('cameraCanvas');
+    var ctx = canvas.getContext('2d');
+
+    // Subscribe to the camera topic
+    var imageTopic = new ROSLIB.Topic({
+      ros: ros,
+      name: '/color/image_raw',
+      messageType: 'sensor_msgs/Image'
+    });
+
+    // Update the canvas with the received image data
+    imageTopic.subscribe(function(message) {
+      // Assuming the message contains the raw image data as an array of uint8 values
+      console.log(message)
+      console.log(message.data)
+      var imageData = new Uint8Array(message.data);
+      console.log(imageData)
+
+      // Set canvas dimensions to match the image
+      canvas.width = message.width;
+      canvas.height = message.height;
+
+      // Create a new canvas ImageData object
+      var imageDataObj = ctx.createImageData(message.width, message.height);
+
+      // Fill the ImageData object with the raw image data
+      for (var i = 0; i < imageData.length; i++) {
+        imageDataObj.data[i] = imageData[i];
+      }
+
+      // Clear the canvas and draw the new image data
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.putImageData(imageDataObj, 0, 0);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Turtle Control</title>
+    <!-- <link rel="stylesheet" type="text/css" href="styles.css"> -->
+</head>
+<meta charset="utf-8" />
+
+<!-- UVOZ KNJIZNIC -->
+<!-- Lahko uvozimo z linkom do spletne strani -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/easeljs@1/lib/easeljs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/eventemitter2@6/lib/eventemitter2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/roslib@1/build/roslib.min.js"></script> -->
+
+<!-- Ali lahko uvozimo za računalnika, uredi Paths-e do knjižnice-->
+<script src="Libraries/easeljs.js"></script> 
+<script src="Libraries/eventemitter2.js"></script> 
+<script src="Libraries/roslib.js"></script> 
+<script src="Libraries/ros2d.js"></script> 
+<script src="MainViewers.js"></script> 
+
+
+
+
+<body onload="init()"></body>
+    <h1>Control the Turtle!</h1>
+
+
+    <p>
+    Run the following commands in the terminal then refresh this page. This will load a map from the
+    <tt>ros-groovy-rail-maps</tt>
+    package.
+  </p>
+  <ol>
+    <li><tt>ros2 launch rosbridge_server rosbridge_websocket_launch.xml</tt></li>
+    <p><tt>This will open websocket on port 9090</tt></p>
+    <li><tt>ros2 run my_custom_pkg map_publisher.py </tt></li>
+    <p><tt>This will publish data of map on topic /map</tt></p>
+    <li><tt>cd ros2_ws/src/my_custom_pkg</tt></li>
+    <p><tt>go to this folder</tt></p>
+    <li><tt>node turtle_ws_server.js </tt></li>
+    <p><tt>open server on port 9091 (WebSocket server started
+        )    </tt></p>
+    <li><tt>ros2 run turtlesim turtlesim_node 
+    </tt></li>
+    <p><tt>run ros TurtleSim</tt></p>
+  </ol>
+  <!-- <div id="map1"></div>
+  <div id="map2"></div> -->
+  
+<a href="./camera_vizualization.html"> Camera Vizualization</a>
+
+    <h3>Buttons to move the turtle</h3>
+    <!-- <button id="x+Btn">x +</button> -->
+    <button id="x+Btn" class="continuousBtn">x +</button>
+    <button id="x-Btn" class="continuousBtn">x -</button>
+    <button id="y+Btn">y +</button>
+    <button id="y-Btn">y -</button>
+    <button id="rotation+Btn">rotation +</button>
+    <button id="rotation-Btn">rotation -</button>
+
+    <div id="map2"></div>
+    
+    <div>
+      <h3>Change the colour of the line</h3>
+        <button id="redBtn">Red</button>
+        <button id="greenBtn">Green</button>
+        <button id="blueBtn">Blue</button>
+      </div>
+
+      <div>
+        <label for="redColor">Red (0-255):</label>
+        <input type="number" id="redColor" step="1" min="0" max="255" value="0">
+      </div>
+      
+      <div>
+        <label for="greenColor">Green (0-255):</label>
+        <input type="number" id="greenColor" step="1" min="0" max="255" value="0">
+      </div>
+      
+      <div>
+        <label for="blueColor">Blue (0-255):</label>
+        <input type="number" id="blueColor" step="1" min="0" max="255" value="0">
+      </div>
+
+      <div>
+        <label for="width">Width (0-10):</label>
+        <input type="number" id="width" step="1" min="0" max="10" value="0">
+      </div>
+      
+      
+      <div>
+        <button id="setColorBtn">Set Color</button>
+      </div>
+
+      <div id="actualLineColor">
+        <h3>Check actual colour of the turtle line</h3>
+          <p>Actul line color: R: <span id="colorR">0.0</span>, G: <span id="colorG">0.0</span>, B: <span id="colorB">0.0</span></p>
+        </div> 
+
+
+    <div id="turtlePosition">
+      <h3>Check turtle position</h3>
+        <p>Turtle Position: X: <span id="turtleX">0.0</span>, Y: <span id="turtleY">0.0</span>, angle: <span id="turtleTheta">0.0</span></p>
+      </div>
+
+
+
+    <div>
+      <h3>Absolute Teleport Turtle</h3>
+        <label for="xCoord">X Coordinate:</label>
+        <input type="number" id="xCoord" step="0.1" value="0.0">
+      </div>
+      
+      <div>
+        <label for="yCoord">Y Coordinate:</label>
+        <input type="number" id="yCoord" step="0.1" value="0.0">
+        <button id="Abs_Teleport_Btn">Absolute Teleport Turtle</button>
+      </div>
+
+      <div>
+        <h3>Action to Absolute Rotate Turtle</h3>
+        <label for="theta">Angle (in radians):</label>
+        <input type="number" id="theta" step="1" value="0">
+        <button id="rotateAbsoluteBtn">Rotate Absolute</button>
+        <p>Rotation Angle Feedback: <span id="angleFeedback">0.000</span></p>
+        <p>Action Result: <span id="rotationresult">--  </span> Opravljena razlika: <span id="rotationDelta">--</span> </p>
+      </div>
+
+      <div>
+        <h3>Set Background Color</h3>
+        <label for="bgRed">Background Red (0-255):</label>
+        <input type="number" id="bgRed" step="1" min="0" max="255" value="0">
+        <br>
+        <label for="bgGreen">Background Green (0-255):</label>
+        <input type="number" id="bgGreen" step="1" min="0" max="255" value="0">
+        <br>
+        <label for="bgBlue">Background Blue (0-255):</label>
+        <input type="number" id="bgBlue" step="1" min="0" max="255" value="0">
+        <button id="setBackgroundBtn">Set Background</button>
+      </div>
+
+      <h3>Clear screen and Reset </h3>
+      <button id="clearBtn">Clear Screen</button>
+      <button id="resetBtn">Reset</button>
+
+      <script src="script.js"></script>
+</body>
+</html>
