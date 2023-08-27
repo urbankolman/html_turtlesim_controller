@@ -4,7 +4,8 @@
 function init() {
     // Connect to ROS 2.
     var ros = new ROSLIB.Ros({
-      url: 'ws://localhost:9090'
+      //url: 'ws://localhost:9090'
+      url: 'ws://192.168.1.100:9090'
     });
 
     // Create the main viewer for GRID
