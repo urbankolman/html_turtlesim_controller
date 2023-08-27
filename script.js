@@ -1,7 +1,7 @@
 // odpri nov web socket na portu 9090 local host
-const ws = new WebSocket('ws://localhost:9091');
+//const ws = new WebSocket('ws://localhost:9091');
 // tukaj napišeš IP računalnika
-// const ws = new WebSocket('ws://172.20.10.8:9090');
+const ws = new WebSocket('ws://172.20.10.8:9091');
 
 
 // **********  INICIALIZACIJA widget-ov IZ HTML-JA **********************************
